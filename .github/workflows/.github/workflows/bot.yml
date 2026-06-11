@@ -1,0 +1,20 @@
+name: Telegram Bot
+on:
+  schedule:
+    - cron: '0 */5 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - run: pip install python-telegram-bot==20.7
+      - run: timeout 18000 python bot.py || true
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
